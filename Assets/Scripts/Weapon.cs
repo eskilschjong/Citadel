@@ -47,39 +47,43 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Combat Mode
         if (LevelManager.LevelIsRunning)
-        {
-            if (!cooldownInitialized)
-            {
-                if (Energy > 0f)
-                    nextFireTime = Time.time + (EnergyCost / Energy);
-                else
-                    nextFireTime = float.MaxValue;
-                
-                cooldownInitialized = true;
-            }
-
-            if (Time.time >= nextFireTime && Energy > 0f)
-            {
-                Shoot();
-                nextFireTime = Time.time + (EnergyCost / Energy);
-            }
-        }
-        // Shop/Build Mode
+            UpdateCombatMode();
         else
+            UpdateBuildMode();
+    }
+
+    private void UpdateCombatMode()
+    {
+        if (!cooldownInitialized)
         {
-            cooldownInitialized = false;
-            if (SelectedWeapon == this)
+            if (Energy > 0f)
+                nextFireTime = Time.time + (EnergyCost / Energy);
+            else
+                nextFireTime = float.MaxValue;
+                
+            cooldownInitialized = true;
+        }
+
+        if (Time.time >= nextFireTime && Energy > 0f)
+        {
+            Shoot();
+            nextFireTime = Time.time + (EnergyCost / Energy);
+        }
+    }
+
+    private void UpdateBuildMode()
+    {
+        cooldownInitialized = false;
+        if (SelectedWeapon == this)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                if (Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    ChangeEnergy(-50f);
-                }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    ChangeEnergy(50f);
-                }
+                ChangeEnergy(-50f);
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ChangeEnergy(50f);
             }
         }
     }
