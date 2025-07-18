@@ -1,0 +1,5 @@
+.skill {
+    background-color: rgba(255, 129, 0, 0.53);
+    width: 25%;
+    height: 25%;
+}

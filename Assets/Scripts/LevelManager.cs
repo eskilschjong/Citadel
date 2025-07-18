@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class LevelManager : MonoBehaviour
 {
     public float LevelHealth;
     public TextMeshProUGUI levelHealthText;
     public TextMeshProUGUI levelTimerText;
+    public TextMeshProUGUI enemyNameText;
+    public ShopUI uiScript;
 
     public static bool LevelIsRunning { get; private set; }
 
@@ -28,12 +31,7 @@ public class LevelManager : MonoBehaviour
     {
         if (!LevelIsRunning && Input.GetKeyDown(KeyCode.Space))
         {
-            LevelHealth = currentLevel.health;
-            levelHealthText.text = LevelHealth.ToString("F1");
-            levelTimer = 30f;
-            LevelIsRunning = true;
-            
-            Debug.Log($"Starting level {currentLevelIndex + 1} vs '{currentLevel.enemyName}'");
+            StartLevel();
         }
 
         if (!LevelIsRunning) return;
@@ -43,18 +41,43 @@ public class LevelManager : MonoBehaviour
 
         if (LevelHealth <= 0)
         {
-            Debug.Log($"You defeated {currentLevel.enemyName}!");
-
-            currentLevelIndex++;
-            LevelIsRunning = false;
-        
+            LevelWin();
         }
         else if (levelTimer <= 0f)
         {
-            Debug.Log("You lose! Time's up.");
-            LevelIsRunning = false;
+            LevelDefeat();
         }
     }
+
+    private void StartLevel()
+    {
+        uiScript.HideShop();
+
+        LevelHealth = currentLevel.health;
+        levelHealthText.text = LevelHealth.ToString("F1");
+        enemyNameText.text = currentLevel.enemyName;
+        levelTimer = 30f;
+        LevelIsRunning = true;
+        
+        Debug.Log($"Starting level {currentLevelIndex + 1} vs '{currentLevel.enemyName}'");
+    }
+
+    private void LevelWin()
+    {
+        Debug.Log($"You defeated {currentLevel.enemyName}!");
+        currentLevelIndex++;
+        LevelIsRunning = false;
+
+        uiScript.ShowShop();
+    }
+
+    private void LevelDefeat()
+    {
+        Debug.Log("You lose! Time's up.");
+        LevelIsRunning = false;
+    }
+
+
 }
 
 [System.Serializable]
