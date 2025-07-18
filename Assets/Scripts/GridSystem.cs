@@ -83,6 +83,13 @@ public class GridSystem : MonoBehaviour
         {
             script.enabled = false;
         }
+
+        // Disable all colliders on the ghost object
+        Collider[] colliders = ghostObject.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders)
+        {
+            collider.enabled = false;
+        }
     }
 
     void CreateHighlightQuad()
@@ -111,23 +118,32 @@ public class GridSystem : MonoBehaviour
                 planeY,
                 Mathf.Round(hit.point.z / gridSize) * gridSize
             );
-            if (ghostObject != null)
-                ghostObject.transform.position = snapped + Vector3.up * (hit.point.y - planeY);
 
             highlightQuad.SetActive(true);
             highlightQuad.transform.position = new Vector3(snapped.x, planeY + highlightOffset, snapped.z);
 
+            bool occupied = occupiedPositions.Contains(snapped);
             if (ghostObject != null)
             {
-                bool occupied = occupiedPositions.Contains(snapped);
-                SetGhostColor(occupied ? Color.red : new Color(1f, 1f, 1f, 0.5f));
+                if (occupied)
+                {
+                    ghostObject.SetActive(false);
+                }
+                else
+                {
+                    ghostObject.SetActive(true);
+                    ghostObject.transform.position = snapped;
+                    SetGhostColor(new Color(1f, 1f, 1f, 0.5f));
+                }
             }
         }
         else
         {
-            highlightQuad.SetActive(false);
+            if (highlightQuad != null) highlightQuad.SetActive(false);
+            if (ghostObject != null) ghostObject.SetActive(false);
         }
     }
+
 
     void SetGhostColor(Color color)
     {
@@ -137,15 +153,24 @@ public class GridSystem : MonoBehaviour
 
     void PlaceObject()
     {
-        Vector3 basePos = new Vector3(
-            Mathf.Round(ghostObject.transform.position.x / gridSize) * gridSize,
-            planeY,
-            Mathf.Round(ghostObject.transform.position.z / gridSize) * gridSize
-        );
-        if (!occupiedPositions.Contains(basePos))
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Instantiate(objectToPlace, basePos, Quaternion.identity);
-            occupiedPositions.Add(basePos);
+            // Snap to grid
+            Vector3 snapped = new Vector3(
+                Mathf.Round(hit.point.x / gridSize) * gridSize,
+                planeY,
+                Mathf.Round(hit.point.z / gridSize) * gridSize
+            );
+
+            // Only place if that snapped cell is not already occupied
+            if (!occupiedPositions.Contains(snapped))
+            {
+                Instantiate(objectToPlace, snapped, Quaternion.identity);
+                occupiedPositions.Add(snapped);
+            }
         }
     }
+
 }
