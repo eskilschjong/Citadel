@@ -3,6 +3,16 @@
     <ui:VisualElement name="Viewport" style="flex-grow: 1; flex-direction: row-reverse; height: 25px;">
         <ui:VisualElement name="ShopContainer" style="flex-grow: 0; flex-basis: auto; justify-content: flex-start; align-items: flex-start; align-content: auto; flex-direction: column; width: 40%; height: 100%; background-color: rgb(108, 108, 108); border-top-width: 25px; border-right-width: 25px; border-bottom-width: 25px; border-left-width: 25px; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; border-left-color: rgb(255, 126, 0); border-right-color: rgb(255, 126, 0); border-top-color: rgb(255, 126, 0); border-bottom-color: rgb(255, 126, 0); padding-top: 2%; padding-right: 2%; padding-bottom: 2%; padding-left: 2%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
             <ui:Label text="SHOP" name="ShopHeader" style="height: 93px; width: 205px; font-size: 50%; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&amp;guid=e3265ab4bf004d28a9537516768c1c75&amp;type=3#LiberationSans&quot;); -unity-text-align: upper-left; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+            <ui:VisualElement name="ItemButtonContainer" style="flex-grow: 1; width: 100%; align-items: flex-start; flex-direction: row; justify-content: center; margin-top: 2px; margin-right: 12px; margin-bottom: 0; margin-left: 0; flex-wrap: wrap;">
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                <ui:Button text="Button" name="ItemButton" class="item" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+            </ui:VisualElement>
             <ui:VisualElement name="SkillButtonContainer" style="flex-grow: 1; width: 100%; align-items: flex-end; flex-direction: row; justify-content: center; margin-top: 2px; margin-right: 12px; margin-bottom: 2px; margin-left: 4px;">
                 <ui:Button text="Button" name="SkillButton1" class="skill" style="margin-top: 0; margin-right: 0; margin-bottom: 0;" />
                 <ui:Button text="Button" name="SkillButton2" class="skill" style="margin-right: 8%; margin-left: 8%; margin-top: 0; margin-bottom: 0;" />

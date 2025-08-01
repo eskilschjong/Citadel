@@ -5,6 +5,7 @@ using System.Linq;
 
 public class ShopUI : MonoBehaviour
 {
+    public static int itemTable = 8;
     // --- Skill definition ---
     [Serializable]
     public class Skill
@@ -25,8 +26,27 @@ public class ShopUI : MonoBehaviour
         new Skill { Name = "CPU Cooler",  Description = "Remove overclock penalty from highest energy weapon",             Rarity = "Uncommon" }
     };
 
+    public class Item
+    {
+        public string Name;
+        public string Description;
+        public float Price;
+        public string Rarity;
+        
+    }
+
+    [Header("Item Pool")]
+    [SerializeField]
+    private Item[] items = new Item[]
+    {
+        new Item { Name = "Generator", Description = "Powers Other Structures", Price = 25f, Rarity = "Generator" },
+        new Item { Name = "Pulsar",  Description = "Low cost plasma weapon", Price = 100f, Rarity = "Common" }
+    };
+
     private Skill[] selectedSkills = new Skill[3];
     private Button[] skillButtons = new Button[3];
+    private Item[] selectedItems = new Item[itemTable];
+    private Button[] itemButtons = new Button[itemTable];
 
     private VisualElement root;
 
@@ -45,7 +65,17 @@ public class ShopUI : MonoBehaviour
             skillButtons[i].clicked += () => BuySkill(index);
         }
 
-        RefreshSkillOptions();
+        RefreshSkillOptions(3);
+
+        var items = root.Query<Button>(name: "ItemButton").ToList();
+        for (int i = 0; i < itemButtons.Length; i++)
+        {
+            itemButtons[i] = items[i];
+            int index = i;
+            itemButtons[i].clicked += () => BuyItem(index);
+        }
+
+        RefreshItemOptions(itemTable);
     }
 
     public void HideShop()
@@ -56,47 +86,57 @@ public class ShopUI : MonoBehaviour
     public void ShowShop()
     {
         root.style.display = DisplayStyle.Flex;
-        RefreshSkillOptions();
+        RefreshSkillOptions(3);
     }
 
     private void Update()
     {
         if (!LevelManager.LevelIsRunning && Input.GetKeyDown(KeyCode.R))
         {
-            RefreshSkillOptions();
+            RefreshSkillOptions(3);
         }
     }
 
-    public void RefreshSkillOptions()
-    {
-        selectedSkills = RollSkills(3);
-        for (int i = 0; i < selectedSkills.Length; i++)
-        {
-            skillButtons[i].text = selectedSkills[i].Name;
-        }
-    }
-
-    private Skill[] RollSkills(int count)
+    public void RefreshSkillOptions(int count)
     {
         Debug.Log($"Rolling {count} skills...");
         var rnd = new System.Random();
-        var rolled = skills.OrderBy(s => rnd.Next()).Take(count).ToArray();
+        selectedSkills = skills.OrderBy(s => rnd.Next()).Take(count).ToArray();
 
-        foreach (var s in rolled)
-            Debug.Log($"Skill: {s.Name} — {s.Description} ({s.Rarity})");
-
-        return rolled;
+        for (int i = 0; i < count; i++)
+        {
+            skillButtons[i].text = selectedSkills[i].Name;
+            Debug.Log($"Skill: {selectedSkills[i].Name} - {selectedSkills[i].Description} ({selectedSkills[i].Rarity})");
+        }
     }
 
-    private void BuySkill(int buttonIndex)
+    public void RefreshItemOptions(int count)
     {
-        if (buttonIndex < 0 || buttonIndex >= selectedSkills.Length)
+        Debug.Log($"Rolling {count} items...");
+
+        for (int i = 0; i < count; i++)
         {
-            Debug.LogError($"Invalid skill index: {buttonIndex}");
+            int randomIndex = UnityEngine.Random.Range(0, items.Length);
+            selectedItems[i] = items[randomIndex];
+            itemButtons[i].text = selectedItems[i].Name;
+            Debug.Log($"Item: {selectedItems[i].Name} - {selectedItems[i].Description} ({selectedItems[i].Rarity})");
+        }
+    }
+
+    private void BuySkill(int index)
+    {
+        if (index < 0 || index >= selectedSkills.Length)
+        {
+            Debug.LogError($"Invalid skill index: {index}");
             return;
         }
 
-        var skill = selectedSkills[buttonIndex];
+        var skill = selectedSkills[index];
         Debug.Log($"Buying skill: {skill.Name}");
+    }
+
+    private void BuyItem(int index)
+    {
+        Debug.Log($"Bought item: {selectedItems[index].Name}");
     }
 }
