@@ -72,7 +72,7 @@ public class ShopUI : MonoBehaviour
         {
             itemButtons[i] = items[i];
             int index = i;
-            itemButtons[i].clicked += () => BuyItem(index);
+            itemButtons[i].clicked += () => SelectItem(index);
         }
 
         RefreshItemOptions(itemTable);
@@ -134,9 +134,22 @@ public class ShopUI : MonoBehaviour
         var skill = selectedSkills[index];
         Debug.Log($"Buying skill: {skill.Name}");
     }
-
-    private void BuyItem(int index)
+    Item selectedItem = new Item();
+    private void SelectItem(int index)
     {
-        Debug.Log($"Bought item: {selectedItems[index].Name}");
+        selectedItem = selectedItems[index];
+
+        GameObject gridSystemObj = GameObject.Find("GridSystem");
+        var gridSystem = gridSystemObj.GetComponent<GridSystem>();
+        gridSystem.SelectItem(selectedItem.Name, selectedItem.Price);
+    }
+
+    private void BuyItem(float price)
+    {
+        GameObject currencyManagerObj = GameObject.Find("CurrencyManager");
+        var currencyManager = currencyManagerObj.GetComponent<CurrencyManager>();
+        currencyManager.decreaseNutsAmount(selectedItem.Price);
+        Debug.Log($"Bought item: {selectedItem.Name}");
+        selectedItem = null;
     }
 }

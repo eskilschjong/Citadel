@@ -16,6 +16,7 @@ public class GridSystem : MonoBehaviour
     private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
     private float planeY;
     private float highlightOffset = 0.01f;
+    float currentPrice;
 
     private void Start()
     {
@@ -43,6 +44,26 @@ public class GridSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Backspace))
             ClearSelection();
+    }
+
+    public void SelectItem(string name, float price)
+    {
+        currentPrice = price;
+        switch (name)
+        {
+            case "Generator":
+                SwitchTo(Generator);
+                break;
+            case "Pulsar":
+                SwitchTo(Pulsar);
+                break;
+            case "Sentry":
+                SwitchTo(Sentry);
+                break;
+            default:
+                ClearSelection();
+                break;
+        }
     }
 
     void SwitchTo(GameObject prefab)

@@ -17,13 +17,15 @@ public class CurrencyManager : MonoBehaviour
         Debug.Log("Nuts amount increased. New nuts amount: " + nutsAmount);
     }
 
-    public void decreaseNutsAmount(float decrease)
+    public bool decreaseNutsAmount(float decrease)
     {
-        nutsAmount -= decrease;
-        if (nutsAmount < 0f)
+        if (decrease > nutsAmount)
         {
-            nutsAmount = 0f;
+            Debug.Log("You cant afford this purchase.");
+            return false;
         }
+        nutsAmount -= decrease;
         Debug.Log("Nuts amount decreased. New nuts amount: " + nutsAmount);
+        return true;
     }
 }
